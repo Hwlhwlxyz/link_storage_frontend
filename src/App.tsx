@@ -1,8 +1,15 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { atom } from 'recoil';
 
 function App() {
+
+  const userId = atom({
+    key: 'userId',
+    default: 1
+  })
+
   return (
     <div className="App">
       <header className="App-header">
@@ -19,7 +26,12 @@ function App() {
           Learn React
         </a>
       </header>
+
+
+      
     </div>
+
+    
   );
 }
 

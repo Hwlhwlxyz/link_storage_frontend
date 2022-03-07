@@ -3,11 +3,33 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DashboardPage from './containers/Dashboard/DashboardPage';
+import LoginPage from './containers/Login/LoginPage';
+import DetailPage from './containers/Detail/DetailPage';
+
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecoilRoot>
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="dashboard" element={<DashboardPage />} />
+      <Route path="detail" element={<DetailPage />} />
+    </Routes>
+  </BrowserRouter>
+  </RecoilRoot>,
   </React.StrictMode>,
+  
   document.getElementById('root')
 );
 
