@@ -2,7 +2,7 @@ import { Container, CssBaseline, Box, Avatar, Typography, Grid, TextField, Butto
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Link from '@mui/material/Link';
-import { getToken, getTokenFromSession, login, userSessionKey } from '../../api/auth';
+
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Type } from 'typescript';
 import { useEffect, useState } from 'react';
@@ -17,18 +17,15 @@ type LocationProps = {
   };
 };
 
-function LoginPage() {
+function SignupPage() {
   const location = useLocation() as LocationProps;
   const [token, setToken] = useState<any>("");
-  const [loginUserId, setLoginUserId] = useRecoilState(userId);
+  const [signupUserId, setsignupUserId] = useRecoilState(userId);
   
   let from = location.state?.from?.pathname || "/";
   let navigate = useNavigate();
   useEffect(() => {
-    if (getTokenFromSession()){
-      console.log("you have logged in")
-      navigate(from, {replace: true});
-    }
+    
   })
 
   
@@ -38,19 +35,12 @@ function LoginPage() {
     const data = new FormData(event.currentTarget);
 
     console.log({
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
     });
 
-    login(data.get('email') as string, data.get('password') as string).then(data=>{
-      console.log("login", data)
-      if (data) {
-        const tokenData = JSON.parse(getTokenFromSession())
-        console.log(tokenData['id'])
-        setLoginUserId(tokenData['id'])
-        navigate(from, {replace: true});
-      }
-    })
+    
     
   };
 
@@ -70,7 +60,7 @@ function LoginPage() {
             {/* <LockOutlinedIcon /> */}
           </Avatar>
           <Typography component="h1" variant="h5">
-            Log in
+            Sign Up
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -95,6 +85,16 @@ function LoginPage() {
                   autoComplete="family-name"
                 />
               </Grid> */}
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="User Name"
+                  name="username"
+                  autoComplete="username"
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -129,7 +129,7 @@ function LoginPage() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Log in
+              Sign up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -149,4 +149,4 @@ function LoginPage() {
   }
 
 
-export default LoginPage;
+export default SignupPage;

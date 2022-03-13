@@ -8,19 +8,43 @@ import {
   TextField,
 } from "@mui/material";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { createDocument } from "../../api/document";
+import { userId } from "../../components/atom";
 import HeaderBar from "../../components/headerBar";
 import { OneDocument } from "../../models/OneDocument";
 
-function DetailPage() {
-  let [detailForm, setDetailForm] = useState<any>({});
-  let [state, setState] = useState<any>();
+interface DetailPageType {
+  type: string; // create, update
+}
+
+function DetailPage(props: DetailPageType) {
+  const [loginUserId, setLoginUserId] = useRecoilState(userId);
+
+  let [state, setState] = useState<any>({
+    "title": '',
+    "url": '',
+    "description": ''
+  });
 
   function handleSubmit(event: any) {
     console.log(state);
 
     event.preventDefault();
+    if (props.type==='create') {
+      createDocument(loginUserId, state);
+    }
   }
+
+  useEffect(()=> {
+    if (props.type==='update'){
+      setState({
+        url:'default url',
+        description: 'default description'
+      })
+    }
+  },[])
 
   function handleInputChange(event: any) {
     const target = event.target;
@@ -46,12 +70,23 @@ function DetailPage() {
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
         >
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+          <FormControl fullWidth sx={{ m: 1 }}>
+              <FormLabel>title</FormLabel>
+              <OutlinedInput
+                onChange={(event) => handleInputChange(event)}
+                name="title"
+                placeholder="Please enter title"
+                value={state?.title}
+              />
+            </FormControl>
+
             <FormControl fullWidth sx={{ m: 1 }}>
               <FormLabel>url</FormLabel>
               <OutlinedInput
                 onChange={(event) => handleInputChange(event)}
                 name="url"
-                placeholder="Please enter text"
+                placeholder="Please enter url"
+                value={state?.url}
               />
             </FormControl>
 
@@ -61,10 +96,12 @@ function DetailPage() {
                 onChange={(event) => handleInputChange(event)}
                 name="description"
                 id="outlined-multiline-flexible"
-                label="Multiline"
+                // label="Multiline"
                 multiline
                 rows={8}
                 fullWidth
+                placeholder="Please enter description"
+                value={state?.description}
               />
             </FormControl>
 

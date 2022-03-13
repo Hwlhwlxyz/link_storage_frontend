@@ -1,5 +1,7 @@
 import { AppBar, Toolbar, Typography, IconButton, Badge } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutButton from './logoutButton'
+
 function HeaderBar() {
   return (
     <AppBar
@@ -26,6 +28,7 @@ function HeaderBar() {
           Dashboard
         </Typography>
 
+<LogoutButton />
         <IconButton color="inherit" sx={{ float: "right", margin: "5px" }}>
           <Badge color="secondary">
             <SettingsIcon />

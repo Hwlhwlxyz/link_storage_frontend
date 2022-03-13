@@ -19,19 +19,18 @@ import { useRecoilState } from "recoil";
 import HeaderBar from "../../components/headerBar";
 
 function DashboardPage() {
+  const [loginUserId, setLoginUserId] = useRecoilState(userId);
   let [documentList, setDocumentList] = useState<OneDocument[] | undefined>([]);
   let [searchBoxData, setSearchBoxData] = useState<
     { key: string; value: string }[]
   >([]);
   let [searchBoxKey, setSearchBoxKey] = useState<string>("");
 
-  const [loginUserId, setLoginUserId] = useRecoilState(userId);
-  console.log("loginUserId", loginUserId);
   useEffect(() => {
-    getDocument().then((data) => {
+    getDocument(loginUserId).then((data) => {
       setDocumentList([...data]);
-      let keyvalueMap = data.map((e) => {
-        return { key: e.url, value: e.url };
+      let keyvalueMap = data.map((e: OneDocument) => {
+        return { key: e.url, value: e.title };
       });
       setSearchBoxData(keyvalueMap);
     });
@@ -75,7 +74,7 @@ function DashboardPage() {
 
       <div id="content">
         <Container component="main" fixed sx={{ bgcolor: "#cfe8fc" }}>
-          <Grid container spacing={2}>
+          {/* <Grid container spacing={2}>
             <Grid item xs={4}>
               <ContentCard title={"title1"} url={"url1"} description={"d1"} />
             </Grid>
@@ -88,15 +87,15 @@ function DashboardPage() {
             <Grid item xs={4}>
               <ContentCard title={"title3"} url={"url3"} description={"d3"} />
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Grid container spacing={2}>
             {documentList &&
-              filterDocumentList(documentList).map((doc) => {
+              filterDocumentList(documentList).map((doc:OneDocument) => {
                 return (
                   <Grid key={doc.url} item xs={4}>
                     <ContentCard
-                      title={"title"}
+                      title={doc.title}
                       url={doc.url}
                       description={doc.description}
                     />
