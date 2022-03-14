@@ -1,11 +1,13 @@
 import { Button } from "@mui/material";
-import { AppBar, Toolbar, Typography, IconButton, Badge } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { logout } from "../api/auth";
 
 
 function LogoutButton() {
+    let navigate = useNavigate();
     function onLogout() {
-        logout()
+        logout();
+        navigate('/', {replace: true});
     }
     return (
 

@@ -1,25 +1,18 @@
 import {
-  Badge,
   Container,
   Grid,
-  IconButton,
-  Toolbar,
-  Typography,
 } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
 import ContentCard from "./components/ContentCard";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { getDocument } from "../../api/document";
 import { useEffect, useState } from "react";
 import ReactSearchBox from "react-search-box";
 import { OneDocument } from "../../models/OneDocument";
 
-import { userId } from "../../components/atom";
-import { useRecoilState } from "recoil";
 import HeaderBar from "../../components/headerBar";
+import { getLoginUserId } from "../../api/auth";
 
 function DashboardPage() {
-  const [loginUserId, setLoginUserId] = useRecoilState(userId);
+  
   let [documentList, setDocumentList] = useState<OneDocument[] | undefined>([]);
   let [searchBoxData, setSearchBoxData] = useState<
     { key: string; value: string }[]
@@ -27,7 +20,7 @@ function DashboardPage() {
   let [searchBoxKey, setSearchBoxKey] = useState<string>("");
 
   useEffect(() => {
-    getDocument(loginUserId).then((data) => {
+    getDocument(getLoginUserId()).then((data) => {
       setDocumentList([...data]);
       let keyvalueMap = data.map((e: OneDocument) => {
         return { key: e.url, value: e.title };

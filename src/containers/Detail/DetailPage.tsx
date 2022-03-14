@@ -7,20 +7,17 @@ import {
   OutlinedInput,
   TextField,
 } from "@mui/material";
-import FormControl, { useFormControl } from "@mui/material/FormControl";
+import FormControl from "@mui/material/FormControl";
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { getLoginUserId } from "../../api/auth";
 import { createDocument } from "../../api/document";
-import { userId } from "../../components/atom";
 import HeaderBar from "../../components/headerBar";
-import { OneDocument } from "../../models/OneDocument";
 
 interface DetailPageType {
   type: string; // create, update
 }
 
 function DetailPage(props: DetailPageType) {
-  const [loginUserId, setLoginUserId] = useRecoilState(userId);
 
   let [state, setState] = useState<any>({
     "title": '',
@@ -33,7 +30,7 @@ function DetailPage(props: DetailPageType) {
 
     event.preventDefault();
     if (props.type==='create') {
-      createDocument(loginUserId, state);
+      createDocument(getLoginUserId(), state);
     }
   }
 
@@ -44,7 +41,7 @@ function DetailPage(props: DetailPageType) {
         description: 'default description'
       })
     }
-  },[])
+  },[props.type])
 
   function handleInputChange(event: any) {
     const target = event.target;

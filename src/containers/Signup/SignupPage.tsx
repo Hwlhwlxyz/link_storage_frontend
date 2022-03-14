@@ -7,7 +7,9 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Type } from 'typescript';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { userId } from '../../components/atom';
+import { recoilTestItem } from '../../components/atom';
+import { signup } from '../../api/user';
+import TransitionAlerts from '../../components/TransitionAlerts';
 
 const theme = createTheme();
 
@@ -19,8 +21,8 @@ type LocationProps = {
 
 function SignupPage() {
   const location = useLocation() as LocationProps;
-  const [token, setToken] = useState<any>("");
-  const [signupUserId, setsignupUserId] = useRecoilState(userId);
+  const [signupResult, setSignupResult] = useState<boolean>(false);
+
   
   let from = location.state?.from?.pathname || "/";
   let navigate = useNavigate();
@@ -39,13 +41,20 @@ function SignupPage() {
       email: data.get('email'),
       password: data.get('password'),
     });
-
+    let username = data.get('username') as string;
+    let email = data.get('email') as string;
+    let password = data.get('password') as string;
+    signup(username, email, password).then(response=>{
+      console.log(response);
+      setSignupResult(true);
+    })
     
     
   };
 
     return (
       <ThemeProvider theme={theme}>
+        <TransitionAlerts open={signupResult} text='signup success'/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -64,32 +73,11 @@ function SignupPage() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              {/* <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid> */}
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
+                  id="username"
                   label="User Name"
                   name="username"
                   autoComplete="username"

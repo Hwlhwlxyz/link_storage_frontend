@@ -33,10 +33,12 @@ function ContentCard(props: { title: any, url: string, description: string}) {
         <Typography variant="body2" sx={{ float:'left', width:'100%', textAlign:'left'  }}>
         {props.description}
         </Typography>
+        
       </CardContent>
-      {/* <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
+      <CardActions>
+        <Button size="small">edit</Button>
+        <Button size="small">delete</Button>
+      </CardActions>
     </Box>
 
 

@@ -7,7 +7,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Type } from 'typescript';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { userId } from '../../components/atom';
+import { recoilTestItem } from '../../components/atom';
 
 const theme = createTheme();
 
@@ -20,9 +20,9 @@ type LocationProps = {
 function LoginPage() {
   const location = useLocation() as LocationProps;
   const [token, setToken] = useState<any>("");
-  const [loginUserId, setLoginUserId] = useRecoilState(userId);
+  const [loginUserId, setLoginUserId] = useRecoilState(recoilTestItem);
   
-  let from = location.state?.from?.pathname || "/";
+  let from = location.state?.from?.pathname || "/dashboard";
   let navigate = useNavigate();
   useEffect(() => {
     if (getTokenFromSession()){
@@ -42,12 +42,13 @@ function LoginPage() {
       password: data.get('password'),
     });
 
-    login(data.get('email') as string, data.get('password') as string).then(data=>{
+    login(data.get('username') as string, data.get('password') as string).then(data=>{
       console.log("login", data)
       if (data) {
         const tokenData = JSON.parse(getTokenFromSession())
         console.log(tokenData['id'])
         setLoginUserId(tokenData['id'])
+        console.log("setLoginUserId:",tokenData['id'])
         navigate(from, {replace: true});
       }
     })
@@ -99,10 +100,10 @@ function LoginPage() {
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
                 />
               </Grid>
               <Grid item xs={12}>

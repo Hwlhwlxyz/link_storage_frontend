@@ -2,8 +2,15 @@ import {atom} from 'recoil'
 
 
 
-export const userId = atom<any>({
+export const recoilTestItem = atom<any>({
   key: 'userId',
-  default: 1
+  default: -1,
+  effects: [
+    () => {
+      console.log("effects1")
+      return () => {};
+    },
+    () => { console.log("effects2") },
+  ],
 })
 

@@ -7,7 +7,7 @@ import DashboardPage from './containers/Dashboard/DashboardPage';
 import DetailPage from './containers/Detail/DetailPage';
 import LoginPage from './containers/Login/LoginPage';
 import PrivateRoute from './components/PrivateRoute';
-import SignupPage from './containers/Signup/LoginPage';
+import SignupPage from './containers/Signup/SignupPage';
 
 function App() {
 
@@ -15,7 +15,8 @@ function App() {
   return (
 
 <Routes>
-      <Route path="/" element={getExamplePage()} />
+<Route path="/" element={<LoginPage />} />
+      <Route path="/example" element={getExamplePage()} />
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignupPage />} />
       <Route path="dashboard" element={<DashboardPage />} />

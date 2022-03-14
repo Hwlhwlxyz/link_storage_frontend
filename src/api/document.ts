@@ -1,8 +1,8 @@
 import { OneDocument } from './../models/OneDocument';
-import { baseUrl } from './../constants';
+import { baseApiUrl, baseUrl } from './../constants';
 import axios from "axios";
 
-const documentUrl = baseUrl+'/document'
+const documentUrl = baseApiUrl+'/document'
 
 export function getDocument(userid: any) {
     // return Promise.resolve([

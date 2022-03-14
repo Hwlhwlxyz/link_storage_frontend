@@ -1,7 +1,6 @@
 import { baseUrl } from '../constants';
 import axios from "axios";
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
+
 
 export const userSessionKey = "user";
 
@@ -34,6 +33,19 @@ export function loginStatus() {
   
 }
 
+export function getLoginUserId() {
+  let token = getTokenFromSession();
+  
+  if (token!=null && token.length>0) {
+    let jsonValue = JSON.parse(token);
+    return jsonValue['id'];
+  }
+  else {
+    return null;
+  }
+  
+}
+
 export function login(username: string, password: string) {
   return getToken(username, password).then(response=>{
     console.log(response)
@@ -52,3 +64,4 @@ export function login(username: string, password: string) {
 export function logout() {
   localStorage.setItem(userSessionKey, '');
 }
+

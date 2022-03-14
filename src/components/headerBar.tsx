@@ -1,8 +1,17 @@
 import { AppBar, Toolbar, Typography, IconButton, Badge } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutButton from './logoutButton'
+import { useRecoilState } from "recoil";
+import { recoilTestItem } from "./atom";
+import { useEffect, useState } from "react";
+import { getLoginUserId } from "../api/auth";
 
 function HeaderBar() {
+  let [loginUserId, setLoginUserId] = useState();
+  useEffect(()=>{
+    setLoginUserId(getLoginUserId())
+  })
+  
   return (
     <AppBar
       position="absolute"
@@ -29,6 +38,7 @@ function HeaderBar() {
         </Typography>
 
 <LogoutButton />
+<p>{loginUserId}</p>
         <IconButton color="inherit" sx={{ float: "right", margin: "5px" }}>
           <Badge color="secondary">
             <SettingsIcon />
