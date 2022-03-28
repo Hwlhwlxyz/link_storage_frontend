@@ -1,4 +1,5 @@
 export class OneDocument {
+    id: any;
     title: string;
     url: string;
     description: string;

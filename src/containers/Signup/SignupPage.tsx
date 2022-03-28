@@ -128,6 +128,9 @@ function SignupPage() {
               </Grid>
             </Grid>
           </Box>
+          <Link href="/" variant="body2">
+                  Already have an account? Sign in
+                </Link> 
         </Box>
         {/* <Copyright sx={{ mt: 5 }} /> */}
       </Container>

@@ -1,15 +1,73 @@
 import { Card, CardContent, Typography, CardActions, Button, CardMedia, Box, Link } from "@mui/material";
-import { useState } from "react";
+import { Ref, useCallback, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { deleteDocument } from "../../../api/document";
+import { documentEditItem } from "../../../components/atom";
+import MuiDialog from "../../../components/muiDialog";
 import logo from '../../../logo.svg';
+import { OneDocument } from "../../../models/OneDocument";
 
-function ContentCard(props: { title: any, url: string, description: string}) {
+interface RefObject {
+  handleClickOpen: () => void,
+  getSubmitResult: () => boolean|null,
+  result: boolean|null
+}
+function ContentCard(props: {id: any, title: any, url: string, description: string, refetchFunction: ()=>void}) {
+  let navigate = useNavigate();
     const [title] = useState(props.title);
-    
     // const imageLink = "https://filestore.community.support.microsoft.com/api/images/6fec6b8b-948b-4ef6-bfec-6369ee1b55f2";
-    const imageLink = "logo.svg";
-  return (
-    <Card sx={{ display:'flex', minWidth: 275 }}>
 
+    const [doc, setDoc] = useRecoilState(documentEditItem);
+    
+    const [infoText, setInfoText] = useState("");
+
+    const inputRef = useRef<RefObject>(null)
+  
+  function onClickEdit() {
+    setDoc({
+      id: props.id,
+      title:props.title,
+      url:props.url,
+      description:props.description
+    })
+    navigate("../detail", { replace: false });
+  }
+
+  function deleteDocButton(d: any){
+    setInfoText("Do you want to delete "+d.title+"?");
+    if (inputRef.current) {
+      inputRef.current.handleClickOpen()
+    }
+    return null;
+  }
+
+  function onCancel() {
+    console.log('cancel')
+  }
+
+  function onConfirm() {
+    console.log('confirm')
+    deleteDocument(props.id).then(response=>{
+      console.log(response)
+      // refetch documents
+      props.refetchFunction()
+    })
+  }
+
+  function onClickDelete() {
+    deleteDocButton({
+      title:props.title,
+      url:props.url,
+      description:props.description
+    })
+  }
+
+  return (
+
+    
+    <Card sx={{ display:'flex', minWidth: 275 }}>
+<MuiDialog   contentText={infoText} ref={inputRef} onCancel={onCancel} onConfirm={onConfirm}></MuiDialog>
 <CardMedia
         component="img"
         sx={{ width: 50, height:50 }}
@@ -36,8 +94,8 @@ function ContentCard(props: { title: any, url: string, description: string}) {
         
       </CardContent>
       <CardActions>
-        <Button size="small">edit</Button>
-        <Button size="small">delete</Button>
+        <Button size="small" onClick={onClickEdit}>edit</Button>
+        <Button size="small" onClick={onClickDelete}>delete</Button>
       </CardActions>
     </Box>
 

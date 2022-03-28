@@ -9,36 +9,72 @@ import {
 } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import { getLoginUserId } from "../../api/auth";
-import { createDocument } from "../../api/document";
+import { createDocument, updateDocument } from "../../api/document";
+import { documentEditItem } from "../../components/atom";
 import HeaderBar from "../../components/headerBar";
+import TransitionAlerts from "../../components/TransitionAlerts";
 
 interface DetailPageType {
   type: string; // create, update
+  id?: any;
+  title?: any;
+  url?: any;
+  description?: any;
 }
 
 function DetailPage(props: DetailPageType) {
 
+  const [doc, setDoc] = useRecoilState(documentEditItem);
+  
+
+
   let [state, setState] = useState<any>({
+    "id": null,
     "title": '',
     "url": '',
     "description": ''
   });
+
+  let [submitResult, setSubmitResult] = useState<boolean>(false);
 
   function handleSubmit(event: any) {
     console.log(state);
 
     event.preventDefault();
     if (props.type==='create') {
-      createDocument(getLoginUserId(), state);
+      createDocument(getLoginUserId(), state).then(response=>{
+        console.log(response);
+        if (response.status===200){
+          setSubmitResult(true);
+        }
+        
+      });
+    }
+    else if (props.type==='update'){
+      updateDocument(getLoginUserId(), state).then(response=>{
+        console.log(response);
+        if (response.status===200){
+          setSubmitResult(true);
+        }
+      })
     }
   }
 
   useEffect(()=> {
     if (props.type==='update'){
       setState({
-        url:'default url',
-        description: 'default description'
+        id: doc.id,
+        title: doc.title,
+        url:doc.url,
+        description: doc.description
+      })
+      console.log({
+        id: doc.id,
+        title: doc.title,
+        url:doc.url,
+        description: doc.description
       })
     }
   },[props.type])
@@ -56,6 +92,7 @@ function DetailPage(props: DetailPageType) {
 
   return (
     <div className="App">
+      <TransitionAlerts open={submitResult} text='submit success'/>
       <HeaderBar />
 
       <Container>

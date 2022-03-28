@@ -8,6 +8,7 @@ import DetailPage from './containers/Detail/DetailPage';
 import LoginPage from './containers/Login/LoginPage';
 import PrivateRoute from './components/PrivateRoute';
 import SignupPage from './containers/Signup/SignupPage';
+import SettingPage from './containers/Setting/SettingPage';
 
 function App() {
 
@@ -22,6 +23,8 @@ function App() {
       <Route path="dashboard" element={<DashboardPage />} />
       <Route path="detail" element={<DetailPage type={'update'} />} />
       <Route path="new" element={<DetailPage type={'create'} />} />
+      <Route path="setting" element={<SettingPage/>} />
+      
       <Route path="private" element={
       <PrivateRoute>
         <DetailPage type={'create'} />

@@ -14,17 +14,18 @@ function HeaderBar() {
   
   return (
     <AppBar
-      position="absolute"
+      // position="absolute"
+      position="fixed"
       color="default"
       elevation={0}
       sx={{
         position: "relative",
-        borderBottom: (t) => `1px solid ${t.palette.divider}`,
+        // borderBottom: (t) => `1px solid ${t.palette.divider}`,
       }}
     >
       <Toolbar
         sx={{
-          pr: "24px", // keep right padding when drawer closed
+          // pr: "24px", // keep right padding when drawer closed
         }}
       >
         <Typography
@@ -45,7 +46,28 @@ function HeaderBar() {
           </Badge>
         </IconButton>
       </Toolbar>
-    </AppBar>
+    </AppBar> 
+    //  <AppBar
+    //     position="fixed"
+    //     sx={{
+ 
+    //     }}
+    //   >
+    //     <Toolbar>
+    //       <IconButton
+    //         color="inherit"
+    //         aria-label="open drawer"
+    //         edge="start"
+
+    //         sx={{ mr: 2, display: { sm: 'none' } }}
+    //       >
+    //         <p>menuicon</p>
+    //       </IconButton>
+    //       <Typography variant="h6" noWrap component="div">
+    //         Responsive drawer
+    //       </Typography>
+    //     </Toolbar>
+    //   </AppBar> 
   );
 }
 

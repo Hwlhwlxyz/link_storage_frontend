@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
 
 function TransitionAlerts(props: { open: boolean; text: string}) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState('text');
 
   useEffect(() => {
