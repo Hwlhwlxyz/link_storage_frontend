@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ReactSearchBox from "react-search-box";
 import HeaderBar from "../../components/headerBar";
+import UserForm from "./components/userForm";
 
 function SettingPage() {
 let name = "name"
@@ -21,16 +22,16 @@ let name = "name"
       <Toolbar />
       <Divider />
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+        {['User'].map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
-              {index % 2 === 0 ? <p>icon1</p> : <p>icon2</p>}
+              {/* {index % 2 === 0 ? <p>icon1</p> : <p>icon2</p>} */}
             </ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
-      <Divider />
+      {/* <Divider />
       <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
@@ -40,7 +41,7 @@ let name = "name"
             <ListItemText primary={text} />
           </ListItem>
         ))}
-      </List>
+      </List> */}
     </div>
   );
 
@@ -48,7 +49,8 @@ let name = "name"
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar
+      
+      {/* <AppBar
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
@@ -69,8 +71,8 @@ let name = "name"
             Responsive drawer
           </Typography>
         </Toolbar>
-      </AppBar>
-      <HeaderBar/>
+      </AppBar> */}
+      {/* <HeaderBar/> */}
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -110,33 +112,19 @@ let name = "name"
       >
         <Toolbar />
         <HeaderBar />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Rhoncus dolor purus non
-          enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus.
-          Convallis convallis tellus id interdum velit laoreet id donec ultrices.
-          Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra
-          nibh cras. Metus vulputate eu scelerisque felis imperdiet proin fermentum
-          leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt lobortis
-          feugiat vivamus at augue. At augue eget arcu dictum varius duis at
-          consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem donec massa
-          sapien faucibus et molestie ac.
-        </Typography>
-        <Typography paragraph>
-          Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper
-          eget nulla facilisi etiam dignissim diam. Pulvinar elementum integer enim
-          neque volutpat ac tincidunt. Ornare suspendisse sed nisi lacus sed viverra
-          tellus. Purus sit amet volutpat consequat mauris. Elementum eu facilisis
-          sed odio morbi. Euismod lacinia at quis risus sed vulputate odio. Morbi
-          tincidunt ornare massa eget egestas purus viverra accumsan in. In hendrerit
-          gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem
-          et tortor. Habitant morbi tristique senectus et. Adipiscing elit duis
-          tristique sollicitudin nibh sit. Ornare aenean euismod elementum nisi quis
-          eleifend. Commodo viverra maecenas accumsan lacus vel facilisis. Nulla
-          posuere sollicitudin aliquam ultrices sagittis orci a.
-        </Typography>
+        <Typography
+           component="div"
+           variant="h4"
+           color="inherit"
+           noWrap
+           sx={{ 
+            //  mr: { sm: `${drawerWidth}px` },
+           flexGrow: 1 ,
+           textAlign: 'center'
+          }}
+         >
+           title
+         </Typography>
 
         <Box
       component="form"
@@ -147,50 +135,7 @@ let name = "name"
       autoComplete="off"
     >
 
-        <FormControl variant="standard">
-        <InputLabel htmlFor="component-simple">Name</InputLabel>
-        <Input id="component-simple" value={name} onChange={handleChange} />
-      </FormControl>
-      <FormControl variant="standard">
-        <InputLabel htmlFor="component-helper">Name</InputLabel>
-        <Input
-          id="component-helper"
-          value={name}
-          onChange={handleChange}
-          aria-describedby="component-helper-text"
-        />
-        <FormHelperText id="component-helper-text">
-          Some important helper text
-        </FormHelperText>
-      </FormControl>
-      <FormControl disabled variant="standard">
-        <InputLabel htmlFor="component-disabled">Name</InputLabel>
-        <Input id="component-disabled" value={name} onChange={handleChange} />
-        <FormHelperText>Disabled</FormHelperText>
-      </FormControl>
-      <FormControl error variant="standard">
-        <InputLabel htmlFor="component-error">Name</InputLabel>
-        <Input
-          id="component-error"
-          value={name}
-          onChange={handleChange}
-          aria-describedby="component-error-text"
-        />
-        <FormHelperText id="component-error-text">Error</FormHelperText>
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="component-outlined">Name</InputLabel>
-        <OutlinedInput
-          id="component-outlined"
-          value={name}
-          onChange={handleChange}
-          label="Name"
-        />
-      </FormControl>
-      <FormControl variant="filled">
-        <InputLabel htmlFor="component-filled">Name</InputLabel>
-        <FilledInput id="component-filled" value={name} onChange={handleChange} />
-      </FormControl>
+        <UserForm />
       </Box>
       </Box>
     </Box>

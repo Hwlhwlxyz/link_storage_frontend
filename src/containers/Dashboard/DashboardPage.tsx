@@ -1,4 +1,4 @@
-import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid, Toolbar } from "@mui/material";
 import ContentCard from "./components/ContentCard";
 import { getDocument } from "../../api/document";
 import { useEffect, useState } from "react";
@@ -47,12 +47,13 @@ function DashboardPage() {
   }
 
   return (
-    <div className="App">
+    <div className="App" >
       <header></header>
 
       <HeaderBar />
+      <Toolbar/>
 
-      <Container>
+      <Container sx={{background: "#cfe8fc", height:"100vh"}}>
         <ReactSearchBox
           placeholder="Placeholder"
           data={searchBoxData}
@@ -69,7 +70,7 @@ function DashboardPage() {
         <div></div>
 
         <div id="content">
-          <Container component="main" fixed sx={{ bgcolor: "#cfe8fc" }}>
+          <Container component="main" fixed sx={{  }}>
             {/* <Grid container spacing={2}>
             <Grid item xs={4}>
               <ContentCard title={"title1"} url={"url1"} description={"d1"} />
@@ -84,7 +85,7 @@ function DashboardPage() {
               <ContentCard title={"title3"} url={"url3"} description={"d3"} />
             </Grid>
           </Grid> */}
-            <Grid item xs={4} height={50}>
+            <Grid item xs={12} height={50}>
               <Button onClick={onClickAdd} component={Link} to="/new">
                 Add
               </Button>

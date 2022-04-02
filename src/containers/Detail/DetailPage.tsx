@@ -1,4 +1,5 @@
 import {
+  AppBar,
   Box,
   Button,
   Container,
@@ -6,6 +7,7 @@ import {
   Grid,
   OutlinedInput,
   TextField,
+  Toolbar,
 } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import { useEffect, useState } from "react";
@@ -94,7 +96,7 @@ function DetailPage(props: DetailPageType) {
     <div className="App">
       <TransitionAlerts open={submitResult} text='submit success'/>
       <HeaderBar />
-
+      <Toolbar/>
       <Container>
         <Grid
           container
