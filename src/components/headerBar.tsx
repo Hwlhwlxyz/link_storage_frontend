@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, Typography, IconButton, Badge } from "@mui/material";
+import { AppBar, Toolbar, Typography, IconButton, Badge, CssBaseline } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import LogoutButton from './logoutButton'
 import { useRecoilState } from "recoil";
@@ -55,11 +55,14 @@ function HeaderBar() {
 //       </Toolbar>
 //     </AppBar> 
      
-
+<div>
+<CssBaseline />
 <AppBar
 color="default"
 elevation={0}
-        position="fixed"
+        // position="fixed"
+        position="static"
+        // position="sticky"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
@@ -106,6 +109,8 @@ elevation={0}
          </IconButton>
         </Toolbar>
       </AppBar> 
+      
+      </div>
   );
 }
 

@@ -96,7 +96,7 @@ function DetailPage(props: DetailPageType) {
     <div className="App">
       <TransitionAlerts open={submitResult} text='submit success'/>
       <HeaderBar />
-      <Toolbar/>
+      {/* <Toolbar/> */}
       <Container>
         <Grid
           container

@@ -7,6 +7,7 @@ import { OneDocument } from "../../models/OneDocument";
 import { Link } from "react-router-dom";
 import HeaderBar from "../../components/headerBar";
 import { getLoginUserId } from "../../api/auth";
+import ContentList from "./components/ContentList";
 
 function DashboardPage() {
   let [documentList, setDocumentList] = useState<OneDocument[] | undefined>([]);
@@ -37,7 +38,7 @@ function DashboardPage() {
   function filterDocumentList(documentList: OneDocument[]) {
     return documentList.filter((e) => {
       return (
-        e.description.includes(searchBoxKey) || e.url.includes(searchBoxKey)
+        e.title.includes(searchBoxKey) || e.description.includes(searchBoxKey) || e.url.includes(searchBoxKey)
       );
     });
   }
@@ -46,14 +47,57 @@ function DashboardPage() {
     console.log("add");
   }
 
+  function ContentCardStyle(doc: OneDocument) {
+    return (
+      <Grid key={doc.id+"card"} item xs={4}>
+        <ContentCard
+          id={doc.id}
+          title={doc.title}
+          url={doc.url}
+          description={doc.description}
+          refetchFunction={() => {
+            getDocument(getLoginUserId()).then((data) => {
+              console.log(data);
+              setDocumentList([...data]);
+              let keyvalueMap = data.map((e: OneDocument) => {
+                return { key: e.url, value: e.title };
+              });
+              setSearchBoxData(keyvalueMap);
+            });
+          }}
+        />
+      </Grid>
+    );
+  }
+
+  function ContentListStyle(doc: OneDocument) {
+    return (
+      <Grid key={doc.id+"list"} item xs={12}>
+        <ContentList
+          document = {doc}
+          refetchFunction={() => {
+            getDocument(getLoginUserId()).then((data) => {
+              console.log(data);
+              setDocumentList([...data]);
+              let keyvalueMap = data.map((e: OneDocument) => {
+                return { key: e.url, value: e.title };
+              });
+              setSearchBoxData(keyvalueMap);
+            });
+          }}
+        />
+      </Grid>
+    );
+  }
+
   return (
     <div className="App" >
       <header></header>
 
       <HeaderBar />
-      <Toolbar/>
+      {/* <Toolbar/> */}
 
-      <Container sx={{background: "#cfe8fc", height:"100vh"}}>
+      <Container sx={{background: "#cfe8fc", height:"100%"}}>
         <ReactSearchBox
           placeholder="Placeholder"
           data={searchBoxData}
@@ -70,23 +114,10 @@ function DashboardPage() {
         <div></div>
 
         <div id="content">
-          <Container component="main" fixed sx={{  }}>
-            {/* <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <ContentCard title={"title1"} url={"url1"} description={"d1"} />
-            </Grid>
-            <Grid item xs={4}>
-              <ContentCard title={"title2"} url={"url2"} description={"d2"} />
-            </Grid>
-            <Grid item xs={4}>
-              <ContentCard title={"title3"} url={"url3"} description={"d3"} />
-            </Grid>
-            <Grid item xs={4}>
-              <ContentCard title={"title3"} url={"url3"} description={"d3"} />
-            </Grid>
-          </Grid> */}
+          <Container component="main" fixed sx={{ background: "#cfe8fc" }}>
+            
             <Grid item xs={12} height={50}>
-              <Button onClick={onClickAdd} component={Link} to="/new">
+              <Button variant="contained" onClick={onClickAdd} component={Link} to="/new">
                 Add
               </Button>
 
@@ -96,26 +127,7 @@ function DashboardPage() {
             <Grid container spacing={2}>
               {documentList &&
                 filterDocumentList(documentList).map((doc: OneDocument) => {
-                  return (
-                    <Grid key={doc.url} item xs={4}>
-                      <ContentCard
-                        id={doc.id}
-                        title={doc.title}
-                        url={doc.url}
-                        description={doc.description}
-                        refetchFunction={() => {
-                          getDocument(getLoginUserId()).then((data) => {
-                            console.log(data);
-                            setDocumentList([...data]);
-                            let keyvalueMap = data.map((e: OneDocument) => {
-                              return { key: e.url, value: e.title };
-                            });
-                            setSearchBoxData(keyvalueMap);
-                          });
-                        }}
-                      />
-                    </Grid>
-                  );
+                  return ContentListStyle(doc)
                 })}
             </Grid>
           </Container>
@@ -124,5 +136,7 @@ function DashboardPage() {
     </div>
   );
 }
+
+
 
 export default DashboardPage;
