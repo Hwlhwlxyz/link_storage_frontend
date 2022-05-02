@@ -44,12 +44,15 @@ function LoginPage() {
 
     login(data.get('username') as string, data.get('password') as string).then(data=>{
       console.log("login", data)
-      if (data) {
+      if (data===true) {
         const tokenData = JSON.parse(getTokenFromSession())
         console.log(tokenData['id'])
         setLoginUserId(tokenData['id'])
         console.log("setLoginUserId:",tokenData['id'])
         navigate(from, {replace: true});
+      }
+      else {
+        console.log("login error")
       }
     })
     

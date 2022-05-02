@@ -14,8 +14,11 @@ import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { getLoginUserId } from "../../api/auth";
 import { createDocument, updateDocument } from "../../api/document";
+import { updateTags } from "../../api/tag";
 import { documentEditItem } from "../../components/atom";
 import HeaderBar from "../../components/headerBar";
+import InputTagList from "../../components/inputTagList";
+import TagList from "../../components/tagList";
 import TransitionAlerts from "../../components/TransitionAlerts";
 
 interface DetailPageType {
@@ -24,12 +27,13 @@ interface DetailPageType {
   title?: any;
   url?: any;
   description?: any;
+  tagList?: any;
 }
 
 function DetailPage(props: DetailPageType) {
 
   const [doc, setDoc] = useRecoilState(documentEditItem);
-  
+  const [tagTitleList, setTagTitleList] = useState<string[]>([]);
 
 
   let [state, setState] = useState<any>({
@@ -43,6 +47,7 @@ function DetailPage(props: DetailPageType) {
 
   function handleSubmit(event: any) {
     console.log(state);
+    console.log(tagTitleList)
 
     event.preventDefault();
     if (props.type==='create') {
@@ -59,6 +64,13 @@ function DetailPage(props: DetailPageType) {
         console.log(response);
         if (response.status===200){
           setSubmitResult(true);
+        }
+      })
+
+      updateTags(getLoginUserId(), state.id, tagTitleList).then(response=>{
+        console.log(response);
+        if (response.status===200){
+
         }
       })
     }
@@ -79,7 +91,7 @@ function DetailPage(props: DetailPageType) {
         description: doc.description
       })
     }
-  },[props.type])
+  }, [props.type])
 
   function handleInputChange(event: any) {
     const target = event.target;
@@ -140,6 +152,10 @@ function DetailPage(props: DetailPageType) {
                 value={state?.description}
               />
             </FormControl>
+
+            <InputTagList 
+            tags={doc.tagList} 
+            setTagsNameList={setTagTitleList} />
 
             <Button
               type="submit"

@@ -1,11 +1,11 @@
 import { baseUrl } from '../constants';
 import axios from "axios";
-
+import { axiosInstance } from './utility/axiosInstance';
 
 export const userSessionKey = "user";
 
 export function getToken(username: string, password: string) {
-    return axios.post(baseUrl+'/token',{
+    return axiosInstance.post(baseUrl+'/token',{
       // username: 'test',
       // password: 'password'
       username: username,

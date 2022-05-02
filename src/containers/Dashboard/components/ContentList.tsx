@@ -30,7 +30,8 @@ function ContentList(props: {document: OneDocument, refetchFunction: ()=>void}) 
       id: props.document.id,
       title:props.document.title,
       url:props.document.url,
-      description:props.document.description
+      description:props.document.description,
+      tagList: props.document.tagList
     })
     navigate("../detail", { replace: false });
   }

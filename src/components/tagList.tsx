@@ -15,8 +15,6 @@ function TagList(props: {tags:Tag[]}) {
   return (
     <div>
       <Stack direction="row" spacing={1}>
-        <Chip label="Clickable" onClick={handleClick} />
-        <Chip label="Clickable" variant="outlined" onClick={handleClick} />
         {tagList && tagList.map((t:Tag)=>{
           return (<Chip key={t.id} label={t.name} variant="outlined" onClick={handleClick} />)
         })}

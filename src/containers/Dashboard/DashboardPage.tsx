@@ -1,4 +1,11 @@
-import { Button, Container, Grid, Toolbar } from "@mui/material";
+import {
+  Button,
+  Container,
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup,
+  Toolbar,
+} from "@mui/material";
 import ContentCard from "./components/ContentCard";
 import { getDocument } from "../../api/document";
 import { useEffect, useState } from "react";
@@ -8,6 +15,7 @@ import { Link } from "react-router-dom";
 import HeaderBar from "../../components/headerBar";
 import { getLoginUserId } from "../../api/auth";
 import ContentList from "./components/ContentList";
+import { ViewList, ViewModule, ViewQuilt } from "@mui/icons-material";
 
 function DashboardPage() {
   let [documentList, setDocumentList] = useState<OneDocument[] | undefined>([]);
@@ -15,6 +23,8 @@ function DashboardPage() {
     { key: string; value: string }[]
   >([]);
   let [searchBoxKey, setSearchBoxKey] = useState<string>("");
+
+  let [contentStyle, setContentStyle] = useState<string>("list");
 
   useEffect(() => {
     getDocument(getLoginUserId()).then((data) => {
@@ -38,7 +48,9 @@ function DashboardPage() {
   function filterDocumentList(documentList: OneDocument[]) {
     return documentList.filter((e) => {
       return (
-        e.title.includes(searchBoxKey) || e.description.includes(searchBoxKey) || e.url.includes(searchBoxKey)
+        e.title.includes(searchBoxKey) ||
+        e.description.includes(searchBoxKey) ||
+        e.url.includes(searchBoxKey)
       );
     });
   }
@@ -49,7 +61,7 @@ function DashboardPage() {
 
   function ContentCardStyle(doc: OneDocument) {
     return (
-      <Grid key={doc.id+"card"} item xs={4}>
+      <Grid key={doc.id + "card"} item xs={4}>
         <ContentCard
           id={doc.id}
           title={doc.title}
@@ -72,9 +84,9 @@ function DashboardPage() {
 
   function ContentListStyle(doc: OneDocument) {
     return (
-      <Grid key={doc.id+"list"} item xs={12}>
+      <Grid key={doc.id + "list"} item xs={12}>
         <ContentList
-          document = {doc}
+          document={doc}
           refetchFunction={() => {
             getDocument(getLoginUserId()).then((data) => {
               console.log(data);
@@ -91,13 +103,13 @@ function DashboardPage() {
   }
 
   return (
-    <div className="App" >
+    <div className="App">
       <header></header>
 
       <HeaderBar />
       {/* <Toolbar/> */}
 
-      <Container sx={{background: "#cfe8fc", height:"100%"}}>
+      <Container sx={{ background: "#cfe8fc", height: "100%" }}>
         <ReactSearchBox
           placeholder="Placeholder"
           data={searchBoxData}
@@ -115,19 +127,53 @@ function DashboardPage() {
 
         <div id="content">
           <Container component="main" fixed sx={{ background: "#cfe8fc" }}>
-            
             <Grid item xs={12} height={50}>
-              <Button variant="contained" onClick={onClickAdd} component={Link} to="/new">
+              <Button
+                variant="contained"
+                onClick={onClickAdd}
+                component={Link}
+                to="/new"
+              >
                 Add
               </Button>
+            </Grid>
 
-              {/* <ContentCard title={"title1"} url={"url1"} description={"d1"} /> */}
+            <Grid
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="flex-end"
+            >
+              <ToggleButtonGroup
+                value={contentStyle}
+                exclusive
+                onChange={(
+                  event: React.MouseEvent<HTMLElement>,
+                  newAlignment: string | null
+                ) => {
+                  console.log(newAlignment);
+                  setContentStyle(newAlignment as string);
+                }}
+              >
+                <ToggleButton value="list" aria-label="list">
+                  <ViewList />
+                </ToggleButton>
+                <ToggleButton value="card" aria-label="module">
+                  <ViewModule />
+                </ToggleButton>
+              </ToggleButtonGroup>
             </Grid>
 
             <Grid container spacing={2}>
               {documentList &&
                 filterDocumentList(documentList).map((doc: OneDocument) => {
-                  return ContentListStyle(doc)
+                  if (contentStyle === "list") {
+                    return ContentListStyle(doc);
+                  } else if (contentStyle === "card") {
+                    return ContentCardStyle(doc);
+                  } else {
+                    return ContentListStyle(doc);
+                  }
                 })}
             </Grid>
           </Container>
@@ -136,7 +182,5 @@ function DashboardPage() {
     </div>
   );
 }
-
-
 
 export default DashboardPage;

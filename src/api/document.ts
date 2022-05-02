@@ -2,6 +2,8 @@ import { OneDocument } from './../models/OneDocument';
 import { baseApiUrl, baseUrl } from './../constants';
 import axios from "axios";
 
+import { axiosInstance } from './utility/axiosInstance';
+
 const documentUrl = baseApiUrl + '/document'
 
 export function getDocument(userid: any) {
@@ -9,7 +11,7 @@ export function getDocument(userid: any) {
   //     {"description":"ddd", "url":"https://www.example.com"},
   //     {"description":"google", "url":"https://www.google.com"}
   // ]) 
-  return axios.get(documentUrl + '/all', {
+  return axiosInstance.get(documentUrl + '/all', {
     params: {
       userid: userid
     }
@@ -21,7 +23,7 @@ export function getDocument(userid: any) {
 export function createDocument(userid: any, document: any) {
   document['userid'] = (userid);
   console.log(document)
-  return axios.post(documentUrl + '/', {
+  return axiosInstance.post(documentUrl + '/', {
     "userid": document.userid,
     "id": document.id,
     "title": document.title,
@@ -39,7 +41,7 @@ export function createDocument(userid: any, document: any) {
 export function updateDocument(userid: any, document: any) {
   document['userid'] = (userid);
   console.log(document)
-  return axios.patch(documentUrl + '/', {
+  return axiosInstance.patch(documentUrl + '/', {
     "userid": document.userid,
     "id": document.id,
     "title": document.title,
@@ -56,7 +58,7 @@ export function updateDocument(userid: any, document: any) {
 
 
 export function deleteDocument(documentId: any) {
-  return axios.delete(documentUrl + '/'+documentId)
+  return axiosInstance.delete(documentUrl + '/'+documentId)
   .then(response=>{
     return response;
   })
