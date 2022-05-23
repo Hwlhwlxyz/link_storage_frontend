@@ -99,7 +99,7 @@ let name = "name"
            textAlign: 'center'
           }}
          >
-           title
+           Setting
          </Typography>
 
         <Box

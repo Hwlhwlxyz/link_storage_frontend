@@ -21,6 +21,7 @@ function App() {
       <Route path="login" element={<LoginPage />} />
       <Route path="signup" element={<SignupPage />} />
       <Route path="dashboard" element={<DashboardPage />} />
+      <Route path="dashboard/tag/:tag" element={<DashboardPage />} />
       <Route path="detail" element={<DetailPage type={'update'} />} />
       <Route path="new" element={<DetailPage type={'create'} />} />
       <Route path="setting" element={<SettingPage/>} />

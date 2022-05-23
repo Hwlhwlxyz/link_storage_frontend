@@ -102,6 +102,7 @@ function DetailPage(props: DetailPageType) {
     // });
 
     setState((values: any) => ({ ...values, [name]: value }));
+    console.log(name, value)
   }
 
   return (

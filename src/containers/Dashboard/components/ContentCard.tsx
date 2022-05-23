@@ -3,6 +3,7 @@ import { Ref, useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { deleteDocument } from "../../../api/document";
+import { getFavicon } from "../../../api/utility/urlUtility";
 import { documentEditItem } from "../../../components/atom";
 import MuiDialog from "../../../components/muiDialog";
 import logo from '../../../logo.svg';
@@ -13,11 +14,11 @@ interface RefObject {
   getSubmitResult: () => boolean|null,
   result: boolean|null
 }
-function ContentCard(props: {id: any, title: any, url: string, description: string, refetchFunction: ()=>void}) {
+function ContentCard(props: {document: OneDocument, refetchFunction: ()=>void}) {
   let navigate = useNavigate();
-    const [title] = useState(props.title);
-    // const imageLink = "https://filestore.community.support.microsoft.com/api/images/6fec6b8b-948b-4ef6-bfec-6369ee1b55f2";
+    const [title] = useState(props.document.title);
 
+    let imageLink = getFavicon(props.document.url)
     const [doc, setDoc] = useRecoilState(documentEditItem);
     
     const [infoText, setInfoText] = useState("");
@@ -26,10 +27,10 @@ function ContentCard(props: {id: any, title: any, url: string, description: stri
   
   function onClickEdit() {
     setDoc({
-      id: props.id,
-      title:props.title,
-      url:props.url,
-      description:props.description
+      id: props.document.id,
+      title:props.document.title,
+      url:props.document.url,
+      description:props.document.description
     })
     navigate("../detail", { replace: false });
   }
@@ -48,7 +49,7 @@ function ContentCard(props: {id: any, title: any, url: string, description: stri
 
   function onConfirm() {
     console.log('confirm')
-    deleteDocument(props.id).then(response=>{
+    deleteDocument(props.document.id).then(response=>{
       console.log(response)
       // refetch documents
       props.refetchFunction()
@@ -57,9 +58,9 @@ function ContentCard(props: {id: any, title: any, url: string, description: stri
 
   function onClickDelete() {
     deleteDocButton({
-      title:props.title,
-      url:props.url,
-      description:props.description
+      title:props.document.title,
+      url:props.document.url,
+      description:props.document.description
     })
   }
 
@@ -71,7 +72,7 @@ function ContentCard(props: {id: any, title: any, url: string, description: stri
 <CardMedia
         component="img"
         sx={{ width: 50, height:50 }}
-        image={logo}
+        image={imageLink}
         alt="Live from space album cover"
       />
 
@@ -80,16 +81,16 @@ function ContentCard(props: {id: any, title: any, url: string, description: stri
 <CardContent  sx={{ flex: '1 0 auto' }}>
         
         <Typography variant="h5" component="div" sx={{ float:'left', width:'100%', textAlign:'left' }}>
-                <Link href={props.url} color="inherit">
+                <Link href={props.document.url} color="inherit">
                 {title}
         </Link>
                   
         </Typography>
         <Typography variant="body2" sx={{ float:'left', width:'100%', textAlign:'left'  }}>
-          {props.url}
+          {props.document.url}
         </Typography>
         <Typography variant="body2" sx={{ float:'left', width:'100%', textAlign:'left'  }}>
-        {props.description}
+        {props.document.description}
         </Typography>
         
       </CardContent>

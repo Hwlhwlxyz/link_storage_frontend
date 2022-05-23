@@ -20,6 +20,20 @@ export function getDocument(userid: any) {
   });
 }
 
+export function getDocumentByTag(userid: any, tag: string) {
+  // return Promise.resolve([
+  //     {"description":"ddd", "url":"https://www.example.com"},
+  //     {"description":"google", "url":"https://www.google.com"}
+  // ]) 
+  return axiosInstance.get(documentUrl + '/tag/' + tag, {
+    params: {
+      userid: userid
+    }
+  }).then(response => {
+    return response.data;
+  });
+}
+
 export function createDocument(userid: any, document: any) {
   document['userid'] = (userid);
   console.log(document)

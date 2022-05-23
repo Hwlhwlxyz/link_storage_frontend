@@ -2,55 +2,117 @@ import {
   Button,
   Container,
   Grid,
+  Pagination,
   ToggleButton,
   ToggleButtonGroup,
   Toolbar,
 } from "@mui/material";
 import ContentCard from "./components/ContentCard";
-import { getDocument } from "../../api/document";
+import { getDocument, getDocumentByTag } from "../../api/document";
 import { useEffect, useState } from "react";
 import ReactSearchBox from "react-search-box";
 import { OneDocument } from "../../models/OneDocument";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import HeaderBar from "../../components/headerBar";
 import { getLoginUserId } from "../../api/auth";
 import ContentList from "./components/ContentList";
 import { ViewList, ViewModule, ViewQuilt } from "@mui/icons-material";
 
 function DashboardPage() {
-  let [documentList, setDocumentList] = useState<OneDocument[] | undefined>([]);
+  let { tag } = useParams();
+  console.log("TAG",tag)
+  let [documentData, setDocumentData] = useState<OneDocument[] | undefined>([]);
+  let [filteredDocumentData, setFilteredDocumentData] = useState<OneDocument[]>([]);
+  
+  let [documentListToDisplay, setDocumentListToDisplay] = useState<OneDocument[] | undefined>([]);
   let [searchBoxData, setSearchBoxData] = useState<
     { key: string; value: string }[]
   >([]);
   let [searchBoxKey, setSearchBoxKey] = useState<string>("");
 
   let [contentStyle, setContentStyle] = useState<string>("list");
+  let [page, setPage] = useState<number>(1);
+  let [countEachPage, setCountEachPage] = useState<number>(5);
+  let [totalpage, setTotalpage] = useState<number>(20);
+  
+
+  function getDocumentFunction(userid: string, tag: string|undefined) {
+    if (tag !== undefined) {
+      return getDocumentByTag(getLoginUserId(), tag)
+    }
+    else {
+      return getDocument(getLoginUserId())
+    }
+    
+  }
 
   useEffect(() => {
-    getDocument(getLoginUserId()).then((data) => {
+    getDocumentFunction(getLoginUserId(), tag).then((data) => {
+      console.log("TAG",tag)
       console.log(data);
-      setDocumentList([...data]);
+      setDocumentData([...data]);
+      setFilteredDocumentData([...data]);
+      setDocumentListToDisplay([...data]);
       let keyvalueMap = data.map((e: OneDocument) => {
         return { key: e.url, value: e.title };
       });
       setSearchBoxData(keyvalueMap);
+      if (data!=null) {
+        if (data.length !== 0) {
+          setTotalpage(Math.ceil(data.length/countEachPage));
+        }
+        else {
+          setTotalpage(0)
+        }
+      }
     });
-  }, []);
+  }, [countEachPage, tag]);
+
+  // change page
+  useEffect(() => {
+    let start = (page-1)*countEachPage;
+    let end = start+countEachPage;
+    setDocumentListToDisplay(filteredDocumentData.slice(start, end));
+  }, [page, documentData, countEachPage, filteredDocumentData])
+  
 
   function searchBoxOnchange(value: string): void {
+    console.log("key:",value)
     if (value == null || value.length == 0) {
+      console.log("set default")
       setSearchBoxKey("");
+      setFilteredDocumentData(documentData||[]);
+      console.log(filteredDocumentData)
+      if (documentData!=undefined) {
+        setTotalpage(Math.ceil(documentData.length/countEachPage))
+      }
+      else {
+        setTotalpage(1);
+      }
     } else {
       setSearchBoxKey(value);
+      if (documentData != undefined) {
+        // setDocumentListToDisplay(filterDocumentList(documentData, value));
+        setFilteredDocumentData(filterDocumentList(documentData, value));
+        if (documentListToDisplay!=undefined) {
+          // setTotalpage(Math.ceil(documentListToDisplay.length/countEachPage));
+          setTotalpage(1); // react-search-box 搜索框在点击其他内容后会清空内容，目前显示所有结果在一页中
+        }
+        else {
+          setTotalpage(1);
+        }
+        setPage(1);
+      }
+      
     }
   }
 
-  function filterDocumentList(documentList: OneDocument[]) {
+  function filterDocumentList(documentList: OneDocument[], key: string) {
     return documentList.filter((e) => {
       return (
-        e.title.includes(searchBoxKey) ||
-        e.description.includes(searchBoxKey) ||
-        e.url.includes(searchBoxKey)
+        e.title.includes(key) ||
+        e.description.includes(key) ||
+        e.url.includes(key)
       );
     });
   }
@@ -59,18 +121,20 @@ function DashboardPage() {
     console.log("add");
   }
 
+  function handlePageChange(event: React.ChangeEvent<unknown>, p: number) {
+    console.log(page)
+    setPage(p);
+  }
+
   function ContentCardStyle(doc: OneDocument) {
     return (
       <Grid key={doc.id + "card"} item xs={4}>
         <ContentCard
-          id={doc.id}
-          title={doc.title}
-          url={doc.url}
-          description={doc.description}
+        document={doc}
           refetchFunction={() => {
             getDocument(getLoginUserId()).then((data) => {
               console.log(data);
-              setDocumentList([...data]);
+              setDocumentListToDisplay([...data]);
               let keyvalueMap = data.map((e: OneDocument) => {
                 return { key: e.url, value: e.title };
               });
@@ -90,7 +154,7 @@ function DashboardPage() {
           refetchFunction={() => {
             getDocument(getLoginUserId()).then((data) => {
               console.log(data);
-              setDocumentList([...data]);
+              setDocumentListToDisplay([...data]);
               let keyvalueMap = data.map((e: OneDocument) => {
                 return { key: e.url, value: e.title };
               });
@@ -121,6 +185,7 @@ function DashboardPage() {
           autoFocus
           leftIcon={<>🎨</>}
           iconBoxSize="48px"
+          clearOnSelect={false}
         />
 
         <div></div>
@@ -165,8 +230,8 @@ function DashboardPage() {
             </Grid>
 
             <Grid container spacing={2}>
-              {documentList &&
-                filterDocumentList(documentList).map((doc: OneDocument) => {
+              {documentListToDisplay &&
+                documentListToDisplay.map((doc: OneDocument) => {
                   if (contentStyle === "list") {
                     return ContentListStyle(doc);
                   } else if (contentStyle === "card") {
@@ -178,6 +243,7 @@ function DashboardPage() {
             </Grid>
           </Container>
         </div>
+        <Pagination count={totalpage} page={page} onChange={handlePageChange}  color="primary" />
       </Container>
     </div>
   );
