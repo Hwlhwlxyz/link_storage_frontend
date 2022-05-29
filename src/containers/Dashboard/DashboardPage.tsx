@@ -33,7 +33,7 @@ function DashboardPage() {
   let [contentStyle, setContentStyle] = useState<string>("list");
   let [page, setPage] = useState<number>(1);
   let [countEachPage, setCountEachPage] = useState<number>(5);
-  let [totalpage, setTotalpage] = useState<number>(20);
+  let [totalpage, setTotalpage] = useState<number>(1);
   
 
   function getDocumentFunction(userid: string, tag: string|undefined) {

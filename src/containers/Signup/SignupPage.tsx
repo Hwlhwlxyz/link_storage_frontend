@@ -54,7 +54,7 @@ function SignupPage() {
 
     return (
       <ThemeProvider theme={theme}>
-        <TransitionAlerts open={signupResult} text='signup success'/>
+        <TransitionAlerts open={signupResult} text='signup success' severity='success'/>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

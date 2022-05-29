@@ -1,13 +1,13 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Alert from '@mui/material/Alert';
+import Alert, { AlertColor } from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
 
-function TransitionAlerts(props: { open: boolean; text: string}) {
+function TransitionAlerts(props: { open: boolean; text: string; severity: AlertColor;}) {
   const [open, setOpen] = React.useState(false);
   const [text, setText] = React.useState('text');
 
@@ -23,6 +23,7 @@ function TransitionAlerts(props: { open: boolean; text: string}) {
     <Box sx={{ width: '100%' }}>
       <Collapse in={open}>
         <Alert
+          severity={props.severity}
           action={
             <IconButton
               aria-label="close"

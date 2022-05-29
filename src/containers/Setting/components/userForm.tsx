@@ -10,7 +10,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getLoginUserId } from "../../../api/auth";
-import { getById } from "../../../api/user";
+import { editUser, getById } from "../../../api/user";
+import TransitionAlerts from "../../../components/TransitionAlerts";
 
 function UserForm() {
   let name = "name";
@@ -21,12 +22,15 @@ function UserForm() {
     confirmPassword:""
   })
 
+  let [openTransitionAlerts, setOpenTransitionAlerts] = useState(false);
+
+
   let [userValue, setUserValue] = useState()
 
   useEffect(()=>{
-    getById(getLoginUserId()).then(value=>{
-      console.log(value)
-    })
+    // getById(getLoginUserId()).then(value=>{
+    //   console.log(value)
+    // })
   })
 
   function handleChange(event: any) {
@@ -44,12 +48,22 @@ function UserForm() {
   }
 
   function handleSubmit(event: any) {
-    console.log(event)
+    // console.log(event)
+    console.log(formValue)
+    editUser(formValue.email, formValue.password).then((data:any)=>{
+      console.log(data)
+    })
+    .catch((error: any)=>{
+      console.log(error)
+      setOpenTransitionAlerts(true);
+    })
+    
   }
 
 
   return (
     <div>
+      <TransitionAlerts open={openTransitionAlerts} text='token expired' severity='warning'/>
       <Grid container spacing={2}>
         {/*<Grid item xs={8}>
          <FormControl fullWidth>
@@ -122,7 +136,7 @@ function UserForm() {
       </FormControl>
         </Grid>
 
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
         <FormControl fullWidth>
         <InputLabel htmlFor="component-outlined">Username</InputLabel>
         <OutlinedInput
@@ -133,7 +147,7 @@ function UserForm() {
           label="Username"
         />
       </FormControl> 
-        </Grid>
+        </Grid> */}
 
         <Grid item xs={12}>
         <FormControl fullWidth>

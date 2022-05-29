@@ -6,6 +6,7 @@ import { deleteDocument } from "../../../api/document";
 import { getFavicon } from "../../../api/utility/urlUtility";
 import { documentEditItem } from "../../../components/atom";
 import MuiDialog from "../../../components/muiDialog";
+import TagList from "../../../components/tagList";
 import logo from '../../../logo.svg';
 import { OneDocument } from "../../../models/OneDocument";
 
@@ -25,15 +26,16 @@ function ContentCard(props: {document: OneDocument, refetchFunction: ()=>void}) 
 
     const inputRef = useRef<RefObject>(null)
   
-  function onClickEdit() {
-    setDoc({
-      id: props.document.id,
-      title:props.document.title,
-      url:props.document.url,
-      description:props.document.description
-    })
-    navigate("../detail", { replace: false });
-  }
+    function onClickEdit() {
+      setDoc({
+        id: props.document.id,
+        title:props.document.title,
+        url:props.document.url,
+        description:props.document.description,
+        tagList: props.document.tagList
+      })
+      navigate("../detail", { replace: false });
+    }
 
   function deleteDocButton(d: any){
     setInfoText("Do you want to delete "+d.title+"?");
@@ -92,7 +94,7 @@ function ContentCard(props: {document: OneDocument, refetchFunction: ()=>void}) 
         <Typography variant="body2" sx={{ float:'left', width:'100%', textAlign:'left'  }}>
         {props.document.description}
         </Typography>
-        
+        <TagList tags={props.document.tagList} />
       </CardContent>
       <CardActions>
         <Button size="small" onClick={onClickEdit}>edit</Button>

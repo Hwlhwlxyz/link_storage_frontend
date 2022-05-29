@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import ReactSearchBox from "react-search-box";
 import HeaderBar from "../../components/headerBar";
 import UserForm from "./components/userForm";
+import { useNavigate } from "react-router-dom";
 
 function SettingPage() {
 let name = "name"
+let navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
     const drawerWidth = 200;
   const handleDrawerToggle = () => {
@@ -17,9 +19,18 @@ let name = "name"
       console.log("change")
   }
 
+  function onclickReturn() {
+    navigate('/', {replace: false});
+  }
   const drawer = (
     <div>
       <Toolbar />
+      <ListItem button key={'text'} onClick={onclickReturn}>
+        <ListItemIcon>
+              {/* {index % 2 === 0 ? <p>icon1</p> : <p>icon2</p>} */}
+            </ListItemIcon>
+            <ListItemText primary={'Return'} />
+      </ListItem>
       <Divider />
       <List>
         {['User'].map((text, index) => (
@@ -49,7 +60,6 @@ let name = "name"
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
